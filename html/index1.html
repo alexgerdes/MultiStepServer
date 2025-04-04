@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<title>Polly</title>
+<meta name="viewport" content="width=device-width; initial-scale=1.0">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-indigo.css">
+<link rel="stylesheet" href="./tutor.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+<body>
+
+<div class = "sticky" style = "background-color: white;">
+   <h2>&nbsp;&nbsp;&nbsp;<img src = "./media/logo.png" style="width:32px;height:40px;">&nbsp;&nbsp;&nbsp;Kwadratische vergelijkingen</h2>
+   <div class="header"><h3>&nbsp;Taak 1</h3></div>
+</div>
+
+<div style = "height:120px"></div>
+<div class="w3-container center">
+   <p> los op: "3(x-2)^2 = 21" 
+   <p><b>Antwoord:</b>
+   <div>
+      <input id="answer" class="w3-input w3-border" style="width:350px"  type="text">
+      <button class= "button shadow" style = "height:40px" onclick="submit()">Kijk na</button>
+   </div>
+
+<button onclick="myFunction()">Try it</button>
+
+
+
+   <div><p> hier staat feedback
+      
+         <p id="feedback">
+   </div>
+
+   <div style="height:30px;"></div>
+</div>
+
+<div style = "height: 120px"></div>
+
+<div class = "footer" style = "height:200px"></div>
+
+</body>
+
+<script>
+
+function myFunction() {
+  alert("Hello! I am an alert box!");
+
+function hideFB() {
+   $("#FBdiv").hide();  
+}
+
+
+function clearField() {
+   $("#answer").val('');
+   $("#feedback").html("");
+   $("#FBdiv").hide();  
+}
+
+function controlSubmit (){
+   if ($("#answer").val() != '') {submit()}
+   alert("hallo") 
+}
+
+function submit() {
+  
+   var txt = $("#answer").val(); 
+
+   function onSuccess(result) {
+      $("#feedback").html(result.feedback);
+      $("#FBdiv").show();
+   }
+
+   function onFailure(result) {
+      var msgs = "Er klopt iets niet aan de invoer"
+      $("#feedback").html(msgs);
+      $("#FBdiv").show();     
+   }
+
+
+   makeRequest(
+      { "service" : "diagnosis"
+      , "step" : {"3(x-2)^2 = 21", txt}
+      }
+      , onSuccess, onFailure);
+        
+}
+
+function makeRequest(request, onSuccess, onFailure) {
+      $.ajax({
+      cache: false,
+      url: "cgi-bin/mbt-server.cgi",
+      // url: "../cgi-bin/mbt-server.cgi",
+      data: "input=" + encodeURI(JSON.stringify(request)),
+      success: onSuccess,
+      error: onFailure,
+      timeout: 100000
+   })
+}
+
+</script>
+
+</html> 

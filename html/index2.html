@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<body>
+
+
+<p> Solve 3(x+2)^2 = 21
+<input id="answer" class="w3-input w3-border" style="width:350px"  type="text">
+
+<button onclick="submit()">check</button>
+<p id="feedback">
+<p id="check"> 
+<script>
+function submit() {
+  
+  var txt = $("#answer").val().replaceAll("+", "%2B").replaceAll("²","^2");
+  $("#check").html(txt);
+  
+  function onSuccess(result) {
+      $("#feedback").html(result.feedback);
+     };
+
+  function onFailure(result) {
+      $("#feedback").html(result.feedback);
+   };
+
+  makeRequest(
+      { "service" : "diagnosis"
+      , "step" : ["3(x%2B2)^2 = 21", txt]
+      }
+      , onSuccess, onFailure);
+        
+};
+
+function makeRequest(request, onSuccess, onFailure) {
+      $.ajax({
+      cache: false,
+      url: "cgi-bin/mbt-server.cgi",
+      // url: "../cgi-bin/mbt-server.cgi",
+      data: "input=" + encodeURI(JSON.stringify(request)),
+      success: onSuccess,
+      error: onFailure,
+      timeout: 100000
+   })
+}
+
+</script>
+
+</body>
+</html>

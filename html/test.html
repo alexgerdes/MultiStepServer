@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<body>
+
+
+
+<input id="answer" class="w3-input w3-border" style="width:350px"  type="text">
+
+<button onclick="submit()">check</button>
+<p id="feedback">
+<script>
+function submit() {
+  
+  var txt = $("#answer").val();
+  
+  alert(txt);
+  $("#feedback").html(txt);
+  
+  function onSuccess(result) {
+      $("#feedback").html(result.feedback);
+     }
+
+  function onFailure(result) {
+      const msgs = "Er klopt iets niet aan de invoer"
+      $("#feedback").html(msgs);     
+   }
+
+}
+</script>
+
+</body>
+</html>

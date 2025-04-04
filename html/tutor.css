@@ -1,0 +1,144 @@
+* {
+  box-sizing: border-box;
+}
+
+table {
+  border-collapse: collapse;
+}
+table td {
+  border: 1px solid black; 
+}
+table tr:first-child td {
+  border-top: 0;
+}
+table tr td:first-child {
+  border-left: 0;
+}
+table tr:last-child td {
+  border-bottom: 0;
+}
+table tr td:last-child {
+  border-right: 0;
+}
+
+.fl {
+   float:left;
+}
+
+.hide {
+   display: none;
+}
+
+.sticky {
+  position: fixed;
+  top:0;
+  width: 100%;
+}
+
+.highz {
+  z-index: 3;
+}
+
+.lowz {
+  z-index: 1;
+}
+.header {
+  overflow: hidden;
+  background-color: #0096FF;
+  color: white;
+  padding: 5px 20px;
+  box-shadow: 1px 2px 3px #969493;
+}
+
+.footer {
+  overflow: hidden;
+  background-color: #0096FF;
+  color: white;
+  padding: 5px 20px;
+  box-shadow: -1px -2px 3px #969493;
+  -webkit-box-shadow: -1px -2px 3px #969493;
+  -moz-box-shadow: -1px -2px 3px #969493
+}
+
+.center {
+  margin: auto;
+  width: 500px;
+}
+
+@media screen and (max-width: 500px) {
+   .center {
+      margin: auto;
+      width: 99%;
+   }
+}
+
+.vid {
+  margin: auto;
+  width: 800px;
+}
+
+@media screen and (max-width: 800px) {
+   .vid {
+      margin: auto;
+      width: 99%;
+   }
+}
+
+.shadow {
+  box-shadow: 1px 2px 3px #969493;
+}
+
+.feedback {
+   background-color: #B6D0E2;
+   border-radius: 3px;
+   padding: 3px 15px;
+}
+
+.helpText {
+   float: right;
+   width: 95%;
+   background-color: #faefd9;
+   border-radius: 3px;
+   padding: 3px 15px;
+}
+
+
+.button {
+  background-color:#34a1eb;
+  border: solid 1px #6495ED;
+  color: white;
+  padding: 3px 32px;
+  text-align: left;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 3px 2px;
+  cursor: pointer;
+  border-radius: 3px 
+}
+
+.button:hover {
+  background-color:#6495ED;
+  border: solid 1px #34a1eb;
+  color: white;
+  padding: 3px 32px;
+  text-align: left;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 3px 2px;
+  cursor: pointer;
+  border-radius: 3px 
+}
+
+.container {
+  display: flex;
+  align-items: center;
+}
+
+.ppRound {
+  border-radius: 2px;
+  width: 50px;
+  height: 30px;
+  box-shadow: 1px 2px 3px #969493;
+};
