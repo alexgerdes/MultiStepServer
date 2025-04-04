@@ -22,11 +22,7 @@ RUN cabal install --installdir=/workdir/
 FROM httpd
 
 COPY ./my-httpd.conf /usr/local/apache2/conf/httpd.conf
-
 COPY ./html/index.html /usr/local/apache2/htdocs/
-
-
 COPY ./html/tutor.css /usr/local/apache2/htdocs/
 COPY ./html/media /usr/local/apache2/htdocs/media
-
 COPY --from=build "/workdir/mbt-server" /usr/local/apache2/cgi-bin/mbt-server.cgi

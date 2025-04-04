@@ -15,9 +15,12 @@
 -- http://localhost/mbt-server.cgi?input={"task":{"x1":1,"x2":2,"x3":5,"y1":8,"y2":10},"answer":42}
 -- https://ideastest.science.uu.nl/cgi-bin/mbt-server.cgi?input={"task":{"x1":1,"x2":2,"x3":5,"y1":8,"y2":10},"answer":42}
 
+{-# LANGUAGE OverloadedStrings #-}
 module Main where
 
 import Data.List
+import Database.SQLite3 (withDatabase, exec)
+import qualified Data.Text as T
 import Ideas.Text.JSON
 import Network.CGI
 import Control.Monad.Trans.Class (lift)
@@ -26,29 +29,24 @@ import Polynomial.PolyDiagnosis (stringDiagnosis)
 
 cgiMain :: CGI CGIResult
 cgiMain = do
-   setHeader "Content-type" "text/json"
-   setHeader "Access-Control-Allow-Origin" "*"
-   mtxt  <- getInput "input"
-   -- tsks  <- lift loadTasks
-   -- bgs'  <- lift $ readFile "./buggyRules/buggys"
-   -- bgsE' <- lift $ readFile "./buggyRules/buggysE"
-  -- let bgs  = read bgs'  :: [String]
-  -- let bgsE = read bgsE' :: [String]
-   case mtxt of
-      Nothing  -> fail "no input"
-      Just txt -> 
-         case parseJSON txt of
-            Left err -> fail $ "invalid json: " ++ show err
-            Right json -> 
-               case evalDecoderJSON decS json of
-                  Left err -> fail $ "invalid json: " ++ show err
-                  Right s  -> case s of 
-                     "diagnosis" -> 
-                         case evalDecoderJSON df json of 
-                            Left err -> fail 
-                               $ "invalid json: " ++ show err
-                            Right new -> output $ show new
- 
+  setHeader "Content-type" "text/json"
+  setHeader "Access-Control-Allow-Origin" "*"
+  txt     <- maybe (fail "no input") id <$> getInput "input"
+  liftIO (logDB txt)
+  json    <- liftCGI (parseJSON txt)
+  service <- liftCGI (evalDecoderJSON decS json)
+  case service of 
+    "diagnosis" -> liftCGI (evalDecoderJSON df json) >>= output . show
+    _           -> fail "unknown service"
+
+liftCGI :: Show err => Either err a -> CGI a
+liftCGI = either (fail . show) return
+
+logDB :: String -> IO ()
+logDB txt = withDatabase "/workspace/mbt.db" (flip exec query)
+ where
+  query = T.concat ["INSERT INTO requests (req) VALUES ('", T.pack txt, "');"]
+
 decS :: DecoderJSON String
 decS = jObject $ jKey "service" jString
 
