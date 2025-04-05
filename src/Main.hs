@@ -19,6 +19,7 @@
 module Main where
 
 import Data.List
+import Data.Maybe
 import Database.SQLite3 (withDatabase, exec)
 import qualified Data.Text as T
 import Ideas.Text.JSON
@@ -31,7 +32,7 @@ cgiMain :: CGI CGIResult
 cgiMain = do
   setHeader "Content-type" "text/json"
   setHeader "Access-Control-Allow-Origin" "*"
-  txt     <- maybe (fail "no input") id <$> getInput "input"
+  txt     <- fromMaybe (fail "no input") <$> getInput "input"
   liftIO (logDB txt)
   json    <- liftCGI (parseJSON txt)
   service <- liftCGI (evalDecoderJSON decS json)
@@ -43,7 +44,7 @@ liftCGI :: Show err => Either err a -> CGI a
 liftCGI = either (fail . show) return
 
 logDB :: String -> IO ()
-logDB txt = withDatabase "/workspace/mbt.db" (flip exec query)
+logDB txt = withDatabase "/workspace/mbt.db" (`exec` query)
  where
   query = T.concat ["INSERT INTO requests (req) VALUES ('", T.pack txt, "');"]
 
